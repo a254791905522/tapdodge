@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endless Falling Action Fun! – Dodge, Dive & Fall Forever</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background: linear-gradient(165deg, #0a0e1a 0%, #111827 40%, #0f172a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 20% 30%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 70%, rgba(249, 115, 22, 0.12) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '⬇ 🔥 ⚡ 💨 🌀 ✨';
+            position: absolute;
+            top: 8%;
+            left: 3%;
+            font-size: 42px;
+            opacity: 0.10;
+            pointer-events: none;
+            z-index: 0;
+            letter-spacing: 30px;
+            transform: rotate(-10deg);
+        }
+
+        .sparkle-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .sparkle-bg::before {
+            content: '▼ ▽ ▾ ▼ ▽';
+            position: absolute;
+            bottom: 12%;
+            right: 5%;
+            font-size: 36px;
+            opacity: 0.08;
+            letter-spacing: 25px;
+            transform: rotate(12deg);
+            color: #06b6d4;
+        }
+
+        @keyframes falling-line {
+            0% { transform: translateY(-100%); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        .fall-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .fall-lines::before,
+        .fall-lines::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 80px;
+            background: linear-gradient(to bottom, transparent, rgba(6, 182, 212, 0.3), transparent);
+            animation: falling-line 3s linear infinite;
+        }
+
+        .fall-lines::before {
+            left: 15%;
+            animation-delay: 0s;
+        }
+
+        .fall-lines::after {
+            left: 75%;
+            animation-delay: 1.5s;
+        }
+
+        .container {
+            background: linear-gradient(165deg, rgba(17, 24, 39, 0.95) 0%, rgba(15, 23, 42, 0.98) 50%, rgba(10, 14, 26, 0.95) 100%);
+            border-radius: 28px;
+            border: 2px solid rgba(6, 182, 212, 0.3);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5),
+                        0 8px 30px rgba(6, 182, 212, 0.08),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            max-width: 660px;
+            width: 100%;
+            padding: 48px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .container:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6),
+                        0 10px 35px rgba(6, 182, 212, 0.15);
+        }
+
+        .game-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 58px;
+            background: linear-gradient(145deg, #06b6d4 0%, #8b5cf6 40%, #f97316 80%, #06b6d4 100%);
+            border-radius: 28px;
+            box-shadow: 0 12px 32px rgba(6, 182, 212, 0.35),
+                        inset 0 2px 0 rgba(255, 255, 255, 0.2),
+                        inset 0 -2px 0 rgba(0, 0, 0, 0.2);
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            transform: rotateY(-6deg) rotateX(4deg);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+
+        .game-icon:hover {
+            transform: rotateY(0deg) rotateX(0deg) scale(1.08);
+        }
+
+        h1 {
+            color: #f1f5f9;
+            font-size: 2.1em;
+            margin-bottom: 10px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        h1 .highlight {
+            background: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 50%, #f97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #06b6d4;
+            font-size: 1.25em;
+            margin-bottom: 28px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .description {
+            color: #94a3b8;
+            line-height: 1.85;
+            font-size: 1.08em;
+            margin-bottom: 28px;
+            text-align: left;
+        }
+
+        .description strong {
+            color: #e2e8f0;
+            font-weight: 700;
+        }
+
+        .features {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .features h3 {
+            color: #f1f5f9;
+            margin-bottom: 18px;
+            font-size: 1.35em;
+            font-weight: 700;
+        }
+
+        .features ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .features li {
+            color: #94a3b8;
+            padding: 10px 0;
+            padding-left: 36px;
+            position: relative;
+            font-size: 1.05em;
+            line-height: 1.6;
+        }
+
+        .features li::before {
+            content: "⬇";
+            position: absolute;
+            left: 0;
+            font-size: 1.1em;
+        }
+
+        .features li:nth-child(2)::before { content: "⚡"; }
+        .features li:nth-child(3)::before { content: "🔥"; }
+        .features li:nth-child(4)::before { content: "🎯"; }
+        .features li:nth-child(5)::before { content: "🌀"; }
+        .features li:nth-child(6)::before { content: "📱"; }
+
+        .info-badges {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 24px 0 8px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.12) 0%, rgba(139, 92, 246, 0.10) 100%);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 0.85em;
+            color: #06b6d4;
+            font-weight: 600;
+        }
+
+        .app-store-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 50%, #f97316 100%);
+            color: #fff;
+            padding: 16px 38px;
+            border-radius: 16px;
+            text-decoration: none;
+            font-size: 1.15em;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 24px rgba(6, 182, 212, 0.35);
+            letter-spacing: 0.5px;
+        }
+
+        .app-store-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(139, 92, 246, 0.45);
+            background: linear-gradient(135deg, #f97316 0%, #8b5cf6 50%, #06b6d4 100%);
+            color: #fff;
+        }
+
+        .app-store-button:active {
+            transform: translateY(-1px);
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 22px;
+            border-top: 2px solid rgba(6, 182, 212, 0.20);
+            font-size: 0.95em;
+            color: #64748b;
+        }
+
+        .footer a {
+            color: #06b6d4;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .footer a:hover {
+            color: #f97316;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.7em;
+            }
+            .subtitle {
+                font-size: 1.1em;
+            }
+            .container {
+                padding: 28px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sparkle-bg"></div>
+    <div class="fall-lines"></div>
+    <div class="container">
+        <div class="game-icon">🪂</div>
+        <h1>Endless Falling <span class="highlight">Action Fun!</span></h1>
+        <p class="subtitle">Dodge, Dive & Fall Forever!</p>
+
+        <div class="info-badges">
+            <span class="badge">🆓 Free</span>
+            <span class="badge">🎮 Action</span>
+            <span class="badge">📱 iOS</span>
+            <span class="badge">⚡ Ages 4+</span>
+        </div>
+
+        <div class="description">
+            <p><strong>Get ready for a high-speed free-fall adventure!</strong> Endless Falling Action Fun! drops you into an endless vertical world filled with obstacles, boosts, and heart-pounding action. Tilt, tap, or swipe your way through tight spaces, collect power-ups, and survive as long as you can while falling faster and faster! How far can you fall?</p>
+        </div>
+
+        <div class="features">
+            <h3>Why You'll Love It</h3>
+            <ul>
+                <li><strong>Endless Free-Fall Action:</strong> Dive into an infinite vertical world where the deeper you fall, the harder it gets — can you beat your high score?</li>
+                <li><strong>Lightning-Fast Reflexes:</strong> Tilt, tap, or swipe to dodge obstacles and navigate through tight gaps at breakneck speed</li>
+                <li><strong>Power-Ups & Boosts:</strong> Collect awesome power-ups that give you shields, speed boosts, and special abilities to survive longer</li>
+                <li><strong>Precision Controls:</strong> Responsive and intuitive controls designed for quick reactions — easy to learn, hard to master</li>
+                <li><strong>Heart-Pounding Challenge:</strong> The speed ramps up the further you fall — stay focused and push your limits every run</li>
+                <li><strong>Play Anywhere:</strong> Available on iPhone, iPad, Mac (Apple Silicon), and Apple Vision — take the thrill wherever you go</li>
+            </ul>
+        </div>
+
+        <a href="https://apps.apple.com/us/app/endless-falling-action-fun/id6756492101?uo=4" class="app-store-button" target="_blank" rel="noopener noreferrer">
+             Download on App Store
+        </a>
+
+        <div class="footer">
+            <p><a href="/privacy.html">Privacy Policy</a> &nbsp;·&nbsp; © Endless Falling Action Fun!</p>
+        </div>
+    </div>
+</body>
+
+</html>
